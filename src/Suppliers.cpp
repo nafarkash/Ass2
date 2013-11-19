@@ -30,7 +30,7 @@ void Suppliers::AddSup(string &name){
 
 Suppliers::~Suppliers() {
     for (int i=0; i<m_suppliers.size(); i++) {
-        m_suppliers[i]->~Supplier();
+        delete m_suppliers[i];
     }
 }
 

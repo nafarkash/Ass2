@@ -29,7 +29,7 @@ int Products::search_for_item (string &name){
 
 Products::~Products() {
     for (int i=0; i<m_products.size(); i++) {
-        m_products[i]->~Product();
+        delete m_products[i];
     }
 }
 

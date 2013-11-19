@@ -134,41 +134,96 @@ void Compute_Price(string &file_name, Products* products, Ingredients* ingredien
                 
             }
         }
-        std::cout<< products->returnProd(12)->getName() <<" " << products->returnProd(12)->getPrice() <<std::endl;
     }
     fs.close();
 }
 
-void Out_File (vector<vector<string> > &Shopping_list, vector<string> &Products, vector<double> &price){
-    fstream Sh, Me;
-    string line;
-    Sh.open ("ShoppingList.out", fstream::out);
-    if (Sh.is_open()){
-        for (unsigned int i=0; i<Shopping_list.size(); i++) {
-            line = "";
-            for (unsigned int j=0; j<Shopping_list[i].size(); j++) {
-                line += Shopping_list[i][j] + ",";
+
+void Read_Commands (string &file_name, Products* products, Suppliers* suppliers, Customers* customers){
+    fstream fs;
+    vector<string> tokens;
+    int index = -1;
+    string line, curr_Supp;
+    Ingredient* curr_Ingre;
+    
+    
+	fs.open("/Users/naorfarkash/Desktop/workspace/Ass2/Ass2/events.conf", fstream::in);
+	if (fs.is_open()){
+        // running till the end of the file
+		while (getline (fs,line)) {
+            //seperates the sentence into tokens
+            tokens = Split_Line(line);
+            if (tokens.size()!=0){   // not pushing empty lines into vector
+                if (tokens[0]=="register") {
+                    index = products->search_for_item(tokens[2]);
+                    customers->AddCustomer(tokens[1], products->returnProd(index), atoi(tokens[3].c_str()));
+                }
+                else if (tokens[0]=="purchase"){
+                    
+                }
+                else if (tokens[0]=="supplier_change") {
+                    index = suppliers->search_for_item(tokens[1]);
+                    // finding the ingredient. Assuming ingredient exists
+                    int i=0;
+                    while (suppliers->getSupp(index)->getIngre(i)->getName()!=tokens[2]) {
+                        i++;
+                    }
+                    curr_Ingre = suppliers->getSupp(index)->getIngre(i);
+                    curr_Supp = suppliers->getSupp(index)->getName();
+                    
+                    cout << curr_Supp << " price before change: " << curr_Ingre->getPrice() << endl;
+                    
+                    Update_Price(curr_Ingre, atof(tokens[3].c_str()), curr_Supp);
+                    
+                    cout << curr_Supp<< " price after change: " << curr_Ingre->getPrice() << endl;
+                }
             }
-            line = line.substr(0,line.size()-1);
-            Sh << line << "\n";
         }
-        
-        
     }
-    Sh.close();
-    
-    Me.open ("Menu.out", fstream::out);
-    if (Me.is_open()){
-        for (unsigned int i=0; i<Products.size(); i++) {
-            Me << Products[i] << "," << price[i] << "\n";
-        }
-        
-        
-    }
-    Me.close();
-    
+    fs.close();
 }
 
 
+void Update_Price (Ingredient* Curr_Ingre, double price, string &supplier){
+    double lowest = 0;
+    if (price<Curr_Ingre->getPrice()) {
+        //the products price is lowered
+        Update_Price_Helper(Curr_Ingre, price, supplier);
+    }
+    // the cheapest supplier has increased his price, find the cheapest
+    else if (price>Curr_Ingre->getPrice() && Curr_Ingre->getSupplier()==supplier){
+        // find the lowest price
+        lowest = Curr_Ingre->getVprices(0);
+        for (int i=1; i<Curr_Ingre->PriceQuan(); i++) {
+            if (Curr_Ingre->getVprices(i)<lowest){
+                lowest = Curr_Ingre->getVprices(i);
+            }
+        }
+        //the products price is increased
+        Update_Price_Helper(Curr_Ingre, lowest, supplier);
+    }
+    int i=0;
+    // finding the ingrediets supplier
+    while (Curr_Ingre->getVSuppliers(i)!=supplier) {
+        i++;
+    }
+    Curr_Ingre->setVPrices(i, price);
+    Curr_Ingre->setVSuppliers(i, supplier);
+}
 
+//This function updates the products price
+void Update_Price_Helper(Ingredient* Curr_Ingre, double price, string &supplier){
+    double dif = 0, newPrice;
+    
+    dif = Curr_Ingre->getPrice() - price;
+    Curr_Ingre->setSupplier(supplier);
+    Curr_Ingre->setPrice(price);
+    //Running through all the Products with this ingredient & change their price
+    for (int i =0; i<Curr_Ingre->ProdQuan(); i++) {
+        //retrieve the original price & change it by dif
+        newPrice = Curr_Ingre->getProd(i)->getPrice()/1.5 - 0.25 - dif;
+        newPrice = (newPrice+0.25)*1.5;
+        Curr_Ingre->getProd(i)->setPrice(newPrice);
+    }
 
+}

@@ -16,9 +16,10 @@ class Supplier {
 public:
     Supplier();
 	Supplier(string &name);
-	virtual ~Supplier();
     string getName() {return this->name_;}
+    Ingredient* getIngre(int index) {return this->m_ingredients[index];}
     void AddIngre (Ingredient* ingre) {this->m_ingredients.push_back(ingre);}
+    virtual ~Supplier();
 private:
 	const string name_;
 	vector < Ingredient * > m_ingredients;

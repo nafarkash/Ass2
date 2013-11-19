@@ -31,7 +31,7 @@ void Ingredients::AddIngre(string &name, string &sup, double price){
 
 Ingredients::~Ingredients() {
     for (int i=0; i<m_ingredients.size(); i++) {
-        m_ingredients[i]->~Ingredient();
+        delete m_ingredients[i];
     }
 }
 
