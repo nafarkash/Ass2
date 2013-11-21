@@ -31,7 +31,7 @@ vector<string> Split_Line (string &line){
     return ans;
 }
 
-void List_input (string &file_name, Suppliers* suppliers, Ingredients* ingredients){
+void List_input (string &file_name, Suppliers &suppliers, Ingredients &ingredients){
     
 	fstream fs;
     int Iindex=-1, Sindex=-1;
@@ -53,48 +53,48 @@ void List_input (string &file_name, Suppliers* suppliers, Ingredients* ingredien
             
             // search_for_item func returns the place of the product 'N' in the vector 'name' if found
             // otherwise returns -1;
-            Iindex = ingredients->search_for_item(N);
+            Iindex = ingredients.search_for_item(N);
             if (Iindex != -1){
-                if (atof(P.c_str())<ingredients->getIngre(Iindex)->getPrice()){ //replace if cheaper
-                	ingredients->getIngre(Iindex)->setPrice(atof(P.c_str()));
-                	ingredients->getIngre(Iindex)->setSupplier(S);
+                if (atof(P.c_str())<ingredients.getIngre(Iindex)->getPrice()){ //replace if cheaper
+                	ingredients.getIngre(Iindex)->setPrice(atof(P.c_str()));
+                	ingredients.getIngre(Iindex)->setSupplier(S);
                 }
                 
             }
             else {
-            	ingredients->AddIngre(N,S,atof(P.c_str()));
+            	ingredients.AddIngre(N,S,atof(P.c_str()));
             }
             
             // pushing supplier & respective price to ingredients vectors
             if (Iindex==-1) {
-                ingredients->getIngre(ingredients->Quantity()-1)->AddSup(S);
-                ingredients->getIngre(ingredients->Quantity()-1)->AddPrice(atof(P.c_str()));
+                ingredients.getIngre(ingredients.Quantity()-1)->AddSup(S);
+                ingredients.getIngre(ingredients.Quantity()-1)->AddPrice(atof(P.c_str()));
             }
             else {
-                ingredients->getIngre(Iindex)->AddSup(S);
-                ingredients->getIngre(Iindex)->AddPrice(atof(P.c_str()));
+                ingredients.getIngre(Iindex)->AddSup(S);
+                ingredients.getIngre(Iindex)->AddPrice(atof(P.c_str()));
             }
          
-            Sindex = suppliers->search_for_item(S);
+            Sindex = suppliers.search_for_item(S);
             if (Sindex == -1){
-            	suppliers->AddSup(S);
+            	suppliers.AddSup(S);
             }
             //creating ingredient list for the supplier
             if (Sindex==-1) {
                 if (Iindex==-1) {
-                    suppliers->getSupp(suppliers->Quantity()-1)->AddIngre(ingredients->getIngre(ingredients->Quantity()-1));
+                    suppliers.getSupp(suppliers.Quantity()-1)->AddIngre(ingredients.getIngre(ingredients.Quantity()-1));
                 }
                 else {
-                   suppliers->getSupp(suppliers->Quantity()-1)->AddIngre(ingredients->getIngre(Iindex));
+                   suppliers.getSupp(suppliers.Quantity()-1)->AddIngre(ingredients.getIngre(Iindex));
                 }
                 
             }
             else {
                 if (Iindex==-1) {
-                    suppliers->getSupp(Sindex)->AddIngre(ingredients->getIngre(ingredients->Quantity()-1));
+                    suppliers.getSupp(Sindex)->AddIngre(ingredients.getIngre(ingredients.Quantity()-1));
                 }
                 else {
-                    suppliers->getSupp(Sindex)->AddIngre(ingredients->getIngre(Iindex));
+                    suppliers.getSupp(Sindex)->AddIngre(ingredients.getIngre(Iindex));
                 }
             }
 		}
@@ -106,7 +106,7 @@ void List_input (string &file_name, Suppliers* suppliers, Ingredients* ingredien
 }
 
 
-void Compute_Price(string &file_name, Products* products, Ingredients* ingredients){
+void Compute_Price(string &file_name, Products &products, Ingredients &ingredients){
     
     fstream fs;
     vector<string> tokens;
@@ -122,15 +122,15 @@ void Compute_Price(string &file_name, Products* products, Ingredients* ingredien
             //seperates the sentence into tokens
             tokens = Split_Line(line);
             if (tokens.size()!=0){   // not pushing empty lines into vector
-                products->AddProd(tokens);
+                products.AddProd(tokens);
                 for (unsigned int i=1; i<tokens.size();i++){
-                    index = ingredients->search_for_item(tokens[i]);
-                    summer+=ingredients->getIngre(index)->getPrice();
-                    int pos = products->search_for_item(tokens[0]);
-                    ingredients->getIngre(index)->AddProd(products->returnProd(pos));
+                    index = ingredients.search_for_item(tokens[i]);
+                    summer+=ingredients.getIngre(index)->getPrice();
+                    int pos = products.search_for_item(tokens[0]);
+                    ingredients.getIngre(index)->AddProd(products.returnProd(pos));
                 }
                 summer = (summer+0.25)*1.5;
-                products->returnProd(products->Quantity()-1)->setPrice(summer);
+                products.returnProd(products.Quantity()-1)->setPrice(summer);
                 
             }
         }
@@ -139,7 +139,7 @@ void Compute_Price(string &file_name, Products* products, Ingredients* ingredien
 }
 
 
-void Read_Commands (string &file_name, Products* products, Suppliers* suppliers, Customers* customers){
+void Read_Commands (string &file_name, Products  &products, Suppliers &suppliers, Customers &customers){
     fstream fs;
     vector<string> tokens;
     int index = -1;
@@ -149,33 +149,39 @@ void Read_Commands (string &file_name, Products* products, Suppliers* suppliers,
     
 	fs.open("/Users/naorfarkash/Desktop/workspace/Ass2/Ass2/events.conf", fstream::in);
 	if (fs.is_open()){
+        
+        //cout << products.returnProd(0)->getName() << " " << products.returnProd(0)->getPrice()<<endl;
+      
         // running till the end of the file
 		while (getline (fs,line)) {
             //seperates the sentence into tokens
             tokens = Split_Line(line);
             if (tokens.size()!=0){   // not pushing empty lines into vector
                 if (tokens[0]=="register") {
-                    index = products->search_for_item(tokens[2]);
-                    customers->AddCustomer(tokens[1], products->returnProd(index), atoi(tokens[3].c_str()));
+                    index = products.search_for_item(tokens[2]);
+                    customers.AddCustomer(tokens[1], products.returnProd(index), atoi(tokens[3].c_str()));
                 }
                 else if (tokens[0]=="purchase"){
                     
                 }
                 else if (tokens[0]=="supplier_change") {
-                    index = suppliers->search_for_item(tokens[1]);
+                    index = suppliers.search_for_item(tokens[1]);
                     // finding the ingredient. Assuming ingredient exists
                     int i=0;
-                    while (suppliers->getSupp(index)->getIngre(i)->getName()!=tokens[2]) {
+                    while (suppliers.getSupp(index)->getIngre(i)->getName()!=tokens[2]) {
                         i++;
                     }
-                    curr_Ingre = suppliers->getSupp(index)->getIngre(i);
-                    curr_Supp = suppliers->getSupp(index)->getName();
+                    curr_Ingre = suppliers.getSupp(index)->getIngre(i);
+                    curr_Supp = suppliers.getSupp(index)->getName();
                     
-                    cout << curr_Supp << " price before change: " << curr_Ingre->getPrice() << endl;
-                    
+                    cout<< "price " << suppliers.getSupp(index)->getIngre(i)->getPrice() << endl;
+                    cout << products.returnProd(8)->getName() << " " << products.returnProd(8)->getPrice()<<endl;
+
                     Update_Price(curr_Ingre, atof(tokens[3].c_str()), curr_Supp);
                     
-                    cout << curr_Supp<< " price after change: " << curr_Ingre->getPrice() << endl;
+                    cout<< "price " << suppliers.getSupp(index)->getIngre(i)->getPrice() << endl;
+                    cout << products.returnProd(8)->getName() << " " << products.returnProd(8)->getPrice()<<endl;
+
                 }
             }
         }

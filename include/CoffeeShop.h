@@ -21,9 +21,9 @@ using namespace std;
 
 
 vector<string> Split_Line (string &line);
-void List_input (string &file_name, Suppliers* suppliers, Ingredients* ingredients);
-void Compute_Price(string &file_name, Products* products, Ingredients* ingredients);
-void Read_Commands (string &file_name, Products* products, Suppliers* suppliers, Customers* customers);
+void List_input (string &file_name, Suppliers &suppliers, Ingredients &ingredients);
+void Compute_Price(string &file_name, Products &products, Ingredients &ingredients);
+void Read_Commands (string &file_name, Products &products, Suppliers &suppliers, Customers &customers);
 void Update_Price (Ingredient* Curr_Ingre, double price, string &supplier);
 void Update_Price_Helper(Ingredient* Curr_Ingre, double price, string &supplier);
 
