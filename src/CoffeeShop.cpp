@@ -2,7 +2,7 @@
  * CoffeeShop.cpp
  *
  *  Created on: Nov 16, 2013
- *      Author: roeibit
+ *      Author: Naor Farcas & Roei Biton
  */
 
 #include <stdlib.h>
