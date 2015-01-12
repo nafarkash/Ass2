@@ -2,18 +2,15 @@
  * Suppliers.cpp
  *
  *  Created on: Nov 16, 2013
- *      Author: roeibit
+ *      Author: Naor Farcas & Roei Biton
  */
 
 #include "../include/Suppliers.h"
 
 
 
-Suppliers::Suppliers() {
-	//default constructor
-}
 
-int Suppliers::search_for_item (string &name){
+const int Suppliers::search_for_item (const string &name) const{
 	int ans =-1;
 	for (unsigned int i=0; i<m_suppliers.size() && ans == -1; i++){
 		if (m_suppliers[i]->getName() == name){
@@ -23,13 +20,13 @@ int Suppliers::search_for_item (string &name){
 	return ans;
 }
 
-void Suppliers::AddSup(string &name){
+void Suppliers::AddSup(const string &name){
 	Supplier * tmp = new Supplier(name);
 	this->m_suppliers.push_back(tmp);
 }
 
 Suppliers::~Suppliers() {
-    for (int i=0; i<m_suppliers.size(); i++) {
+    for (unsigned int i=0; i<m_suppliers.size(); i++) {
         delete m_suppliers[i];
     }
 }

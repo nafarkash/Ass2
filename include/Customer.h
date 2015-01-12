@@ -13,15 +13,23 @@
 using namespace std;
 
 class Customer {
-
+    
 public:
+    Customer():name_(""), m_Prod(){};
     virtual double computeProductPrice(double originalPrice)=0;
+    const string& getName()const {return name_;}
+    Product* getProd(){return m_Prod;}
     virtual ~Customer() {};
+    
+private:
+    Customer(const Customer& other):name_(""), m_Prod(){
+    }
+    
+    
 protected:
     string name_;
     Product* m_Prod;
-    
-    
+    Customer& operator=(const Customer& other){return *this;}
 };
 
 

@@ -7,9 +7,6 @@
 //
 
 #include "../include/Customers.h"
-Customers::Customers(){
-    
-}
 
 void Customers::AddCustomer (string &name, Product* prod, int Vip){
     Customer* tmp;
@@ -22,9 +19,9 @@ void Customers::AddCustomer (string &name, Product* prod, int Vip){
     
     this->m_customers.push_back(tmp);
 }
-    
+
 Customers::~Customers(){
-    for (int i=0; i<m_customers.size(); i++) {
+    for (unsigned int i=0; i<m_customers.size(); i++) {
         delete m_customers[i];
     }
     

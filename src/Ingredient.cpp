@@ -2,15 +2,12 @@
  * Ingredient.cpp
  *
  *  Created on: Nov 16, 2013
- *      Author: roeibit
+ *      Author: Naor Farcas & Roei Biton
  */
 
 #include "../include/Ingredient.h"
 
-Ingredient::Ingredient(){
-   
-}
-Ingredient::Ingredient(const string &name, string &supp, double price) : name_(name), supplier_(supp), price_(price){
+Ingredient::Ingredient(const string &name,const string &supp,const double price) : name_(name), supplier_(supp), price_(price), Vsuppliers_(), Vprices_(), m_prods_(){
 }
 
 

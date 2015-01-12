@@ -2,7 +2,7 @@
  * Suppliers.h
  *
  *  Created on: Nov 16, 2013
- *      Author: roeibit
+ *      Author: Naor Farcas & Roei Biton
  */
 
 #ifndef SUPPLIERS_H_
@@ -17,12 +17,12 @@ private:
 	vector< Supplier * > m_suppliers;
     
 public:
-	Suppliers();
+	Suppliers():m_suppliers(){};
 	virtual ~Suppliers();
-	int search_for_item(string &name);
-	Supplier * getSupp(int index) {return this->m_suppliers[index];}
-	void AddSup (string &name);
-    int Quantity() {return this->m_suppliers.size();}
+	const int search_for_item(const string &name) const;
+	Supplier& getSupp(int index) {return *this->m_suppliers[index];}
+	void AddSup (const string &name);
+    const int Quantity() {return (int)this->m_suppliers.size();}
 };
 
 #endif /* SUPPLIERS_H_ */

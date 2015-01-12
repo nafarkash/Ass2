@@ -2,7 +2,7 @@
  * Supplier.h
  *
  *  Created on: Nov 16, 2013
- *      Author: roeibit
+ *      Author: Naor Farcas & Roei Biton
  */
 
 #ifndef SUPPLIER_H_
@@ -15,8 +15,8 @@ using namespace std;
 class Supplier {
 public:
     Supplier();
-	Supplier(string &name);
-    string getName() {return this->name_;}
+	Supplier(const string &name);
+    const string& getName() {return this->name_;}
     Ingredient* getIngre(int index) {return this->m_ingredients[index];}
     void AddIngre (Ingredient* ingre) {this->m_ingredients.push_back(ingre);}
     virtual ~Supplier();

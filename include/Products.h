@@ -2,7 +2,7 @@
  * Products.h
  *
  *  Created on: Nov 16, 2013
- *      Author: roeibit
+ *      Author: Naor Farcas & Roei Biton
  */
 
 #ifndef PRODUCTS_H_
@@ -15,11 +15,11 @@ class Products {
 private:
 	vector< Product * > m_products;
 public:
-	Products();
+	Products():m_products(){};
 	virtual ~Products();
     void AddProd (vector<string> &vec);
-    int search_for_item (string &name);
-    Product* returnProd (int index) {return m_products[index];}
-    int Quantity() {return this->m_products.size();}
+    const int search_for_item (const string &name) const;
+    Product& returnProd (int index) {return *this->m_products[index];}
+    const int Quantity() {return (int)this->m_products.size();}
 };
 #endif /* PRODUCTS_H_ */

@@ -2,7 +2,7 @@
  * Product.h
  *
  *  Created on: Nov 16, 2013
- *      Author: roeibit
+ *      Author: Naor Farcas & Roei Biton
  */
 
 #ifndef PRODUCT_H_
@@ -15,11 +15,11 @@ using namespace std;
 class Product {
 public:
     Product(vector<string> &vec);
-	Product();
-	virtual ~Product();
-    void AddIngre (string &name);
-    string getName() {return name_;}
-    double getPrice() {return price_;}
+    Product():name_(""), price_(0), m_ingredients(){};
+    virtual ~Product();
+    void AddIngre (const string &name);
+    const string& getName() {return name_;}
+    const double getPrice() {return price_;}
     void setPrice(double price) {price_=price;}
 private:
     string name_;
