@@ -39,7 +39,7 @@ void List_input (string &file_name, Suppliers &suppliers, Ingredients &ingredien
     string line, N, S, P;
     vector<string> tokens;
     
-	fs.open("/Users/naorfarkash/Desktop/workspace/Ass2/Ass2/Suppliers.conf", fstream::in);
+	fs.open("/Suppliers.conf", fstream::in);
 	if (fs.is_open()){
         
         // running till the end of the file
@@ -114,7 +114,7 @@ void Compute_Price(string &file_name, Products &products, Ingredients &ingredien
     double summer=0;
     string line;
     
-	fs.open("/Users/naorfarkash/Desktop/workspace/Ass2/Ass2/Products.conf", fstream::in);
+	fs.open("/Products.conf", fstream::in);
 	if (fs.is_open()){
         // running till the end of the file
 		while (getline (fs,line)) {
@@ -147,7 +147,7 @@ void Read_Commands (string &file_name, Products  &products, Suppliers &suppliers
     Ingredient* curr_Ingre;
     
     
-	fs.open("/Users/naorfarkash/Desktop/workspace/Ass2/Ass2/events.conf", fstream::in);
+	fs.open("/events.conf", fstream::in);
 	if (fs.is_open()){
         
         //cout << products.returnProd(0)->getName() << " " << products.returnProd(0)->getPrice()<<endl;
